@@ -27,6 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -66,14 +67,18 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    //
+    //Ikony
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+    //Jsoup
     implementation ("org.jsoup:jsoup:1.16.1")
+    //paperdb
     implementation ("io.github.pilgr:paperdb:2.7.2")
+    //itextpdf
     implementation ("com.itextpdf:itextpdf:5.5.13.3")
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.6.0")
-    //
+    implementation("androidx.navigation:navigation-compose:2.7.0-alpha01")
+    //Status bar
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     // For AppWidgets support
 //    implementation ("androidx.glance:glance-appwidget:1.0.0-rc01")
 //

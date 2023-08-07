@@ -20,12 +20,16 @@ class MainActivity : ComponentActivity() {
             PosilkiTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "home") {
-                    composable("home") {
+                    composable(
+                        "home"
+                    ) {
                         HomeScreen(onClick = {
                             navController.navigate(it)
                         })
                     }
-                    composable("info") {
+                    composable(
+                        "info"
+                    ) {
                         InfoScreen()
                     }
                 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -75,8 +76,9 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 onClick = {
                     menu(false)
                 },
+                modifier = Modifier.size(50.dp),
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(20.dp),
             ) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
@@ -217,7 +219,7 @@ fun LazyItem(
         ),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
-            .padding(1.dp)
+            .padding(horizontal = 10.dp, vertical = 2.dp)
             .fillMaxWidth()
             .animateContentSize(
                 animationSpec = tween(
@@ -258,7 +260,8 @@ fun LazyItem(
                     fontSize = fontBody.sp,
                     maxLines = 10,
                     overflow = TextOverflow.Ellipsis,
-                    lineHeight = 33.sp
+                    lineHeight = 33.sp,
+                    modifier = Modifier.padding(end = 40.dp)
                 )
             }
         }
