@@ -80,9 +80,8 @@ dependencies {
     //Status bar
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     // For AppWidgets support
-//    implementation ("androidx.glance:glance-appwidget:1.0.0-rc01")
-//
-//    implementation("androidx.glance:glance-material:1.0.0-rc01")
-//    implementation("androidx.glance:glance-material3:1.0.0-rc01")
+    implementation ("androidx.glance:glance-appwidget:1.0.0-beta01")
+
+    implementation("androidx.glance:glance-material3:1.0.0-beta01")
 
 }

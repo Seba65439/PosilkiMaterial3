@@ -68,7 +68,7 @@ fun menu(flag: Boolean = true) {
             var second: LocalDate = LocalDate.of(2023, 2, 7)
             val date: LocalDate = Instant.ofEpochMilli(it.data.time)
                 .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+                .toLocalDate()
             do {
                 if (date == first || date == second)
                     it.workday = true
