@@ -1,7 +1,6 @@
-package pl.maifu.posilki
+package pl.maifu.posilki.widget
 
 import android.content.Context
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -9,19 +8,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.Image
+import androidx.glance.ImageProvider
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
+import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import io.paperdb.Paper
+import pl.maifu.posilki.MainActivity
+import pl.maifu.posilki.Posilek
+import pl.maifu.posilki.R
+import pl.maifu.posilki.widget.callback.MealWidgetUpdateCallback
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -40,10 +53,23 @@ object MealWidget : GlanceAppWidget() {
                     break
                 }
             }
+            meal.forEach {
+                var first: LocalDate = LocalDate.of(2023, 2, 6)
+                var second: LocalDate = LocalDate.of(2023, 2, 7)
+                val date: LocalDate = Instant.ofEpochMilli(it.data.time)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                do {
+                    if (date == first || date == second)
+                        it.workday = true
+                    first = first.plusDays(8)
+                    second = second.plusDays(8)
+                } while (second.isBefore(LocalDate.now().plusMonths(1)))
+            }
         } catch (e: Exception) {
         }
         provideContent {
-            ContentView(meal)
+            ContentView(meal.filter { it.workday }.take(2))
         }
 
 
@@ -53,16 +79,26 @@ object MealWidget : GlanceAppWidget() {
     private fun ContentView(m: List<Posilek>) {
         val df = SimpleDateFormat("dd.MM.yy E", Locale.getDefault())
 
-        Column(modifier = GlanceModifier.fillMaxSize().background(Color.DarkGray)) {
+        Column(modifier = GlanceModifier.fillMaxSize().background(Color.DarkGray).clickable(actionStartActivity<MainActivity>())) {
+           Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.End){
+               Image(provider = ImageProvider(R.drawable.ic_refresh),
+                   contentDescription = "Refresh",
+                   modifier = GlanceModifier
+                       .clickable(actionRunCallback(MealWidgetUpdateCallback::class.java))
+                       .padding(5.dp)
+
+               )
+           }
+
             if (m.isNotEmpty()) {
                 m.forEach {
                     Text(
                         text = "${df.format(it.data)}\n${it.opis}",
-                        modifier = GlanceModifier.padding(horizontal = 20.dp, vertical = 2.dp),
+                        modifier = GlanceModifier.padding(horizontal = 10.dp, vertical = 2.dp),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal,
                             color = ColorProvider(Color.White),
-                            fontSize = 12.sp
+                            fontSize = 13.sp
                         )
                     )
                 }

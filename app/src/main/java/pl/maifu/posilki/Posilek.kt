@@ -75,7 +75,6 @@ fun menu(flag: Boolean = true) {
                 first = first.plusDays(8)
                 second = second.plusDays(8)
             } while (second.isBefore(LocalDate.now().plusMonths(1)))
-
         }
 
     }
