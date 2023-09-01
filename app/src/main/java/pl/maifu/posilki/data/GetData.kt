@@ -80,7 +80,7 @@ class GetData {
                 file.delete()
             }
 
-            val lines = textPdf.lines().drop(8)
+            val lines = textPdf.lines().drop(7)
             Log.d("log.d", lines.toString())
             val meals = mutableListOf<Posilek>()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
