@@ -1,5 +1,6 @@
 package pl.maifu.posilki.ui.screens
 
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -38,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -66,9 +68,15 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(onClick: (String) -> Unit) {
+    var fontHeader by rememberSaveable { mutableIntStateOf(35) }
+    var fontBody by rememberSaveable { mutableIntStateOf(25) }
+    val isWatch = Build.MODEL == "GLL-AL01"
+    if (isWatch) {
+        fontHeader = 15
+        fontBody = 10
 
-    val fontHeader by rememberSaveable { mutableStateOf(35) }
-    val fontBody by rememberSaveable { mutableStateOf(25) }
+    }
+
     Scaffold(floatingActionButton = {
         FloatingActionButton(
             onClick = {
@@ -93,16 +101,18 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     .fillMaxWidth()
                     .padding(6.dp)
             ) {
+                if (!isWatch) {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .weight(6f)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
 
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .weight(6f)
-                        .align(Alignment.CenterVertically)
-                )
                 IconButton(onClick = {
                     onClick("info")
                 }, modifier = Modifier.weight(1f)) {
@@ -251,7 +261,6 @@ fun LazyItem(
                     fontSize = fontBody.sp,
                     maxLines = 10,
                     overflow = TextOverflow.Ellipsis,
-                    lineHeight = 33.sp,
                     modifier = Modifier.padding(end = 40.dp)
                 )
             }

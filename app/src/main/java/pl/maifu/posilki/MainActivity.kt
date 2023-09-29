@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Paper.init(this)
         menu()
+
         setContent {
             PosilkiTheme {
                 val navController = rememberNavController()

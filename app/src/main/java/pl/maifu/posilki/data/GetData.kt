@@ -77,7 +77,14 @@ class GetData {
                 file.delete()
             }
 
-            val lines = textPdf.lines().drop(7)
+            var lines = textPdf.lines()
+            var dropIndex = 0
+            lines.forEachIndexed { index, item ->
+                if (item == "nazwa"){
+                    dropIndex = index
+                }
+            }
+            lines = lines.subList(dropIndex + 1, lines.lastIndex)
             Log.d("log.d", lines.toString())
             val meals = mutableListOf<Posilek>()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
