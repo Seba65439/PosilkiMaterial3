@@ -1,6 +1,5 @@
 package pl.maifu.posilki.data
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.itextpdf.text.pdf.PdfReader
@@ -8,8 +7,6 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor
 import kotlinx.coroutines.*
 import org.jsoup.Connection
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 import pl.maifu.posilki.Constants
 import pl.maifu.posilki.Posilek
 import java.io.BufferedInputStream
@@ -90,7 +87,12 @@ class GetData {
                 if (string.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
                     if (index != 0) {
                         Log.d("log.d", "$tempDate $description")
-                        meals.add(Posilek(dateFormat.parse(tempDate)!!, description.split(" ").drop(2).joinToString(" ")))
+                        meals.add(
+                            Posilek(
+                                dateFormat.parse(tempDate)!!,
+                                description.split(" ").drop(2).joinToString(" ")
+                            )
+                        )
                         description = ""
                     }
                     tempDate = string
@@ -99,7 +101,12 @@ class GetData {
                 }
             }
             Log.d("log.d", "$tempDate $description")
-            meals.add(Posilek(dateFormat.parse(tempDate)!!, description.split(" ").drop(2).joinToString(" ")))
+            meals.add(
+                Posilek(
+                    dateFormat.parse(tempDate)!!,
+                    description.split(" ").drop(2).joinToString(" ")
+                )
+            )
 
             return@async meals
         } catch (e: Exception) {

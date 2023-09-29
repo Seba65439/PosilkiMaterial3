@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.simulateHotReload
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,9 +18,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun InfoScreen() {
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -29,7 +26,8 @@ fun InfoScreen() {
                 .fillMaxWidth()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 20.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -40,9 +38,11 @@ fun InfoScreen() {
                 )
             }
 
-            Card(modifier = Modifier
-                .padding(5.dp)
-                .fillMaxWidth()) {
+            Card(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth()
+            ) {
                 Text(
                     text = "Wersja: 1.0",
                     modifier = Modifier.padding(10.dp),

@@ -24,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -68,56 +67,53 @@ import java.util.Locale
 @Composable
 fun HomeScreen(onClick: (String) -> Unit) {
 
-    var fontHeader by rememberSaveable { mutableStateOf(35) }
-    var fontBody by rememberSaveable { mutableStateOf(25) }
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    menu(false)
-                },
-                modifier = Modifier.size(50.dp),
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(20.dp),
+    val fontHeader by rememberSaveable { mutableStateOf(35) }
+    val fontBody by rememberSaveable { mutableStateOf(25) }
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(
+            onClick = {
+                menu(false)
+            },
+            modifier = Modifier.size(50.dp),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            shape = RoundedCornerShape(20.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Refresh",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        }
+    }, topBar = {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(6.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Refresh",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-        },
-        topBar = {
-            Surface(
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                ) {
 
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .weight(6f)
-                            .align(Alignment.CenterVertically)
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .weight(6f)
+                        .align(Alignment.CenterVertically)
+                )
+                IconButton(onClick = {
+                    onClick("info")
+                }, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info, contentDescription = "Info button"
                     )
-                    IconButton(onClick = {
-                        onClick("info")
-                    }, modifier = Modifier.weight(1f)) {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = "Info button"
-                        )
-                    }
                 }
             }
+        }
 
-        }) { padding ->
+    }) { padding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -130,7 +126,8 @@ fun HomeScreen(onClick: (String) -> Unit) {
             val progressAnimationValue by infiniteTransition.animateFloat(
                 initialValue = 0.0f,
                 targetValue = progressValue,
-                animationSpec = infiniteRepeatable(animation = tween(900)), label = ""
+                animationSpec = infiniteRepeatable(animation = tween(900)),
+                label = ""
             )
             if (posilki.isEmpty()) {
                 Box(contentAlignment = Alignment.Center) {
@@ -177,16 +174,14 @@ fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
                     fontHeader = fontHeader,
                     textColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
-            } else if (m.workday)
-                LazyItem(
-                    m = m,
-                    fontBody = fontBody,
-                    fontHeader = fontHeader,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    textColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            else
-                LazyItem(m = m, fontBody = fontBody, fontHeader = fontHeader)
+            } else if (m.workday) LazyItem(
+                m = m,
+                fontBody = fontBody,
+                fontHeader = fontHeader,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            else LazyItem(m = m, fontBody = fontBody, fontHeader = fontHeader)
         }
         CoroutineScope(Dispatchers.Main).launch {
             state.scrollToItem(index ?: 0)
@@ -209,27 +204,23 @@ fun LazyItem(
         mutableStateOf(m.state)
     }
     val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f,
-        label = ""
+        targetValue = if (expandedState) 180f else 0f, label = ""
     )
 
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = color,
-        ),
+    Card(colors = CardDefaults.cardColors(
+        containerColor = color,
+    ),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 2.dp)
             .fillMaxWidth()
             .animateContentSize(
                 animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
+                    durationMillis = 300, easing = LinearOutSlowInEasing
                 )
             ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        onClick = { expandedState = !expandedState }
-    ) {
+        onClick = { expandedState = !expandedState }) {
         Column(
             verticalArrangement = Arrangement.spacedBy(1.dp),
             modifier = Modifier.padding(start = 6.dp, top = 1.dp, bottom = 4.dp, end = 6.dp)

@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "pl.maifu.posilki"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "pl.maifu.posilki"
         minSdk = 31
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -41,7 +41,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -52,8 +52,8 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.compose.ui:ui")
@@ -68,7 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //Ikony
-    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.1")
     //Jsoup
     implementation ("org.jsoup:jsoup:1.16.1")
     //paperdb
@@ -76,12 +76,12 @@ dependencies {
     //itextpdf
     implementation ("com.itextpdf:itextpdf:5.5.13.3")
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.0-alpha01")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     //Status bar
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     // For AppWidgets support
-    implementation ("androidx.glance:glance-appwidget:1.0.0-beta01")
+    implementation ("androidx.glance:glance-appwidget:1.0.0")
 
-    implementation("androidx.glance:glance-material3:1.0.0-beta01")
+    implementation("androidx.glance:glance-material3:1.0.0")
 
 }
