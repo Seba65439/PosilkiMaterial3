@@ -78,12 +78,7 @@ class GetData {
             }
 
             var lines = textPdf.lines()
-            var dropIndex = 0
-            lines.forEachIndexed { index, item ->
-                if (item == "nazwa"){
-                    dropIndex = index
-                }
-            }
+            val dropIndex = lines.indexOf("nazwa")
             lines = lines.subList(dropIndex + 1, lines.lastIndex)
             Log.d("log.d", lines.toString())
             val meals = mutableListOf<Posilek>()
