@@ -1,6 +1,7 @@
 package pl.maifu.posilki
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import io.paperdb.Paper
@@ -20,10 +21,7 @@ data class Posilek(
     var state: Boolean = false,
     var workday: Boolean = false
 )
-data class Settings(
-    val fontSize: Int,
-    val theme: Boolean
-)
+
 
 var posilki = mutableStateListOf<Posilek>()
 var index: Int? = null

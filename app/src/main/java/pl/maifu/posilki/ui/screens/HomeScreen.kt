@@ -73,7 +73,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
     val isWatch = Build.MODEL == "GLL-AL01"
     if (isWatch) {
         fontHeader = 15
-        fontBody = 10
+        fontBody = 15
 
     }
 
@@ -169,9 +169,10 @@ fun HomeScreen(onClick: (String) -> Unit) {
 
 @Composable
 fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
+    val isWatch = Build.MODEL == "GLL-AL01"
     val state = rememberLazyListState()
     LazyColumn(
-        contentPadding = PaddingValues(1.dp),
+        contentPadding = PaddingValues(if(isWatch) 20.dp else 1.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         state = state,
     ) {

@@ -11,8 +11,8 @@ android {
         applicationId = "pl.maifu.posilki"
         minSdk = 29
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -68,7 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //Ikony
-    implementation ("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.2")
     //Jsoup
     implementation ("org.jsoup:jsoup:1.16.1")
     //paperdb
