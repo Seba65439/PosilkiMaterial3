@@ -1,7 +1,6 @@
 package pl.maifu.posilki
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import io.paperdb.Paper
@@ -16,17 +15,12 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 
 data class Posilek(
-    val data: Date,
-    val opis: String,
-    var state: Boolean = false,
-    var workday: Boolean = false
+    val data: Date, val opis: String, var state: Boolean = false, var workday: Boolean = false
 )
-
 
 var posilki = mutableStateListOf<Posilek>()
 var index: Int? = null
 var currentDate: Date = Date.from(Instant.now())
-
 
 fun menu(flag: Boolean = true) {
     CoroutineScope(IO).launch {
@@ -64,12 +58,10 @@ fun menu(flag: Boolean = true) {
         posilki.forEach {
             var first: LocalDate = LocalDate.of(2023, 2, 6)
             var second: LocalDate = LocalDate.of(2023, 2, 7)
-            val date: LocalDate = Instant.ofEpochMilli(it.data.time)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate()
+            val date: LocalDate =
+                Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
             do {
-                if (date == first || date == second)
-                    it.workday = true
+                if (date == first || date == second) it.workday = true
                 first = first.plusDays(8)
                 second = second.plusDays(8)
             } while (second.isBefore(LocalDate.now().plusMonths(1)))

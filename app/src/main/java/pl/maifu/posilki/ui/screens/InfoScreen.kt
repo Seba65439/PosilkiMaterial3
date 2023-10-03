@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Card
@@ -58,9 +60,23 @@ fun InfoScreen(onClick: (String) -> Unit) {
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
             ) {
+
                 Text(
-                    text = "Wersja: 1.0",
+                    text = "Urządzenie: ${Build.MODEL}",
+                    modifier = Modifier.padding(10.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "Producent: ${Build.BRAND}",
+                    modifier = Modifier.padding(10.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "Android: ${Build.VERSION.RELEASE}",
                     modifier = Modifier.padding(10.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp

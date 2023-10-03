@@ -4,10 +4,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +25,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -54,6 +50,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,21 +130,13 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 .padding(padding),
             color = MaterialTheme.colorScheme.background
         ) {
-            val progressValue = 1f
-            val infiniteTransition = rememberInfiniteTransition(label = "")
 
-            val progressAnimationValue by infiniteTransition.animateFloat(
-                initialValue = 0.0f,
-                targetValue = progressValue,
-                animationSpec = infiniteRepeatable(animation = tween(900)),
-                label = ""
-            )
             if (posilki.isEmpty()) {
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
                 Box(contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        progress = progressAnimationValue,
-                        strokeWidth = 5.dp,
-                        color = MaterialTheme.colorScheme.primary,
+                    LottieAnimation(
+                        composition = composition,
+                        iterations = LottieConstants.IterateForever
                     )
                 }
 
@@ -172,7 +164,7 @@ fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
     val isWatch = Build.MODEL == "GLL-AL01"
     val state = rememberLazyListState()
     LazyColumn(
-        contentPadding = PaddingValues(if(isWatch) 20.dp else 1.dp),
+        contentPadding = PaddingValues(if (isWatch) 20.dp else 1.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         state = state,
     ) {

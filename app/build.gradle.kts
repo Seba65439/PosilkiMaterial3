@@ -81,7 +81,8 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     // For AppWidgets support
     implementation ("androidx.glance:glance-appwidget:1.0.0")
-
     implementation("androidx.glance:glance-material3:1.0.0")
+    //Lottite animation
+    implementation ("com.airbnb.android:lottie-compose:6.1.0")
 
 }
