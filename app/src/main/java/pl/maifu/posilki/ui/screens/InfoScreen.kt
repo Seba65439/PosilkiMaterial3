@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -62,31 +63,33 @@ fun InfoScreen(onClick: (String) -> Unit) {
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-
+                val padding = Modifier.padding(start = 15.dp, end = 15.dp, top = 2.dp)
+                Spacer(modifier = Modifier.padding(10.dp))
                 Text(
                     text = "Urządzenie: ${Build.MODEL}",
-                    modifier = Modifier.padding(10.dp),
+                    modifier = padding,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
                 )
                 Text(
                     text = "Producent: ${Build.BRAND}",
-                    modifier = Modifier.padding(10.dp),
+                    modifier = padding,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
                 )
                 Text(
                     text = "Android: ${Build.VERSION.RELEASE}",
-                    modifier = Modifier.padding(10.dp),
+                    modifier = padding,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
                 )
                 Text(
                     text = "Autor: maifu",
-                    modifier = Modifier.padding(10.dp),
+                    modifier = padding,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
                 )
+                Spacer(modifier = Modifier.padding(10.dp))
             }
 
 
