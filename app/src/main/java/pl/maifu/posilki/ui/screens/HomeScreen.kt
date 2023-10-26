@@ -6,6 +6,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,16 +36,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -135,8 +143,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
                 Box(contentAlignment = Alignment.Center) {
                     LottieAnimation(
-                        composition = composition,
-                        iterations = LottieConstants.IterateForever
+                        composition = composition, iterations = LottieConstants.IterateForever
                     )
                 }
 
@@ -163,9 +170,20 @@ fun HomeScreen(onClick: (String) -> Unit) {
 fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
     val isWatch = Build.MODEL == "GLL-AL01"
     val state = rememberLazyListState()
+    val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
     LazyColumn(
         contentPadding = PaddingValues(if (isWatch) 20.dp else 1.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier
+            .onRotaryScrollEvent {
+                coroutineScope.launch {
+                    state.scrollBy(it.verticalScrollPixels)
+                }
+                true
+            }
+            .focusRequester(focusRequester)
+            .focusable(),
         state = state,
     ) {
         items(list) { m ->
@@ -189,6 +207,9 @@ fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
         CoroutineScope(Dispatchers.Main).launch {
             state.scrollToItem(index ?: 0)
         }
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
