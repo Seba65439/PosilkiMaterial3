@@ -19,8 +19,10 @@ import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
@@ -79,21 +81,25 @@ object MealWidget : GlanceAppWidget() {
     private fun ContentView(m: List<Posilek>) {
         val df = SimpleDateFormat("dd.MM.yy E", Locale.getDefault())
 
-        Column(modifier = GlanceModifier.fillMaxSize().background(Color.DarkGray).clickable(actionStartActivity<MainActivity>())) {
-           Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.End){
-               Image(provider = ImageProvider(R.drawable.ic_refresh),
-                   contentDescription = "Refresh",
-                   modifier = GlanceModifier
-                       .clickable(actionRunCallback(MealWidgetUpdateCallback::class.java))
-                       .padding(5.dp)
+        Column(
+            modifier = GlanceModifier.fillMaxSize().background(Color.DarkGray)
+                .clickable(actionStartActivity<MainActivity>())
+        ) {
+            Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                Image(
+                    provider = ImageProvider(R.drawable.ic_refresh),
+                    contentDescription = "Refresh",
+                    modifier = GlanceModifier
+                        .clickable(actionRunCallback(MealWidgetUpdateCallback::class.java))
+                        .padding(5.dp)
 
-               )
-           }
+                )
+            }
 
             if (m.isNotEmpty()) {
                 m.forEach {
                     Text(
-                        text = "${df.format(it.data)}\n${it.opis}",
+                        text = "${df.format(it.data)} ${it.opis}",
                         modifier = GlanceModifier.padding(horizontal = 10.dp, vertical = 2.dp),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal,
@@ -101,14 +107,17 @@ object MealWidget : GlanceAppWidget() {
                             fontSize = 13.sp
                         )
                     )
+                    Spacer(modifier = GlanceModifier.fillMaxWidth().height(2.dp).background(Color.Gray))
                 }
             } else {
-                Text(text = "Otwórz aplikację aby skonfigurować",
+                Text(
+                    text = "Otwórz aplikację aby skonfigurować",
                     modifier = GlanceModifier.padding(20.dp),
                     style = TextStyle(
                         fontWeight = FontWeight.Medium,
                         color = ColorProvider(Color.White),
-                        fontSize = 15.sp)
+                        fontSize = 15.sp
+                    )
                 )
             }
         }

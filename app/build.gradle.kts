@@ -11,8 +11,8 @@ android {
         applicationId = "pl.maifu.posilki"
         minSdk = 29
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -68,7 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //Ikony
-    implementation ("androidx.compose.material:material-icons-extended:1.5.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
     //Jsoup
     implementation ("org.jsoup:jsoup:1.16.1")
     //paperdb
@@ -76,7 +76,7 @@ dependencies {
     //itextpdf
     implementation ("com.itextpdf:itextpdf:5.5.13.3")
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.3")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
     //Status bar
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     // For AppWidgets support
