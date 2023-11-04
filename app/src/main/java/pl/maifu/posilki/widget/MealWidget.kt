@@ -58,12 +58,10 @@ object MealWidget : GlanceAppWidget() {
             meal.forEach {
                 var first: LocalDate = LocalDate.of(2023, 2, 6)
                 var second: LocalDate = LocalDate.of(2023, 2, 7)
-                val date: LocalDate = Instant.ofEpochMilli(it.data.time)
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
+                val date: LocalDate =
+                    Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
                 do {
-                    if (date == first || date == second)
-                        it.workday = true
+                    if (date == first || date == second) it.workday = true
                     first = first.plusDays(8)
                     second = second.plusDays(8)
                 } while (second.isBefore(LocalDate.now().plusMonths(1)))
@@ -89,14 +87,14 @@ object MealWidget : GlanceAppWidget() {
                 Image(
                     provider = ImageProvider(R.drawable.ic_refresh),
                     contentDescription = "Refresh",
-                    modifier = GlanceModifier
-                        .clickable(actionRunCallback(MealWidgetUpdateCallback::class.java))
+                    modifier = GlanceModifier.clickable(actionRunCallback(MealWidgetUpdateCallback::class.java))
                         .padding(5.dp)
 
                 )
             }
 
             if (m.isNotEmpty()) {
+                Spacer(modifier = GlanceModifier.fillMaxWidth().height(1.dp).background(Color.Gray))
                 m.forEach {
                     Text(
                         text = "${df.format(it.data)} ${it.opis}",
@@ -107,7 +105,7 @@ object MealWidget : GlanceAppWidget() {
                             fontSize = 13.sp
                         )
                     )
-                    Spacer(modifier = GlanceModifier.fillMaxWidth().height(2.dp).background(Color.Gray))
+                    Spacer(modifier = GlanceModifier.fillMaxWidth().height(1.dp).background(Color.Gray))
                 }
             } else {
                 Text(
