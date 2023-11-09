@@ -55,22 +55,34 @@ fun menu(flag: Boolean = true) {
                 it.state = true
             }
         }
-        posilki.forEach {
-            var first: LocalDate = LocalDate.of(2023, 2, 6)
-            var second: LocalDate = LocalDate.of(2023, 2, 7)
-            val date: LocalDate =
-                Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
-            do {
-                if (date == first || date == second) it.workday = true
-                first = first.plusDays(8)
-                second = second.plusDays(8)
-            } while (second.isBefore(LocalDate.now().plusMonths(1)))
-        }
+        posilki.workday()
 
     }
 
 }
 
+fun SnapshotStateList<Posilek>.workday() {
+    this.forEach { it.workday = false }
+    this.forEach {
+        var first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
+        var second: LocalDate = Constants.datyRozpoczecia[readFirstDay()].plusDays(1)
+        val date: LocalDate =
+            Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
+        do {
+            if (date == first || date == second) it.workday = true
+            first = first.plusDays(8)
+            second = second.plusDays(8)
+        } while (second.isBefore(LocalDate.now().plusMonths(1)))
+    }
+}
+
+fun readFirstDay(): Int {
+    return Paper.book().read("date", 0) ?: 0
+}
+
+fun saveBrigade(brigade: Int) {
+    Paper.book().write("date", brigade)
+}
 
 
 

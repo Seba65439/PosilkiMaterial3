@@ -29,9 +29,11 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import io.paperdb.Paper
+import pl.maifu.posilki.Constants
 import pl.maifu.posilki.MainActivity
 import pl.maifu.posilki.Posilek
 import pl.maifu.posilki.R
+import pl.maifu.posilki.readFirstDay
 import pl.maifu.posilki.widget.callback.MealWidgetUpdateCallback
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -51,13 +53,13 @@ object MealWidget : GlanceAppWidget() {
             data.time = data.time - TimeUnit.HOURS.toMillis(22)
             for (it in readed!!) {
                 if (it.data.after(data)) {
-                    meal.addAll(readed!!.subList(readed.indexOf(it), readed.lastIndex + 1))
+                    meal.addAll(readed.subList(readed.indexOf(it), readed.lastIndex + 1))
                     break
                 }
             }
             meal.forEach {
-                var first: LocalDate = LocalDate.of(2023, 2, 6)
-                var second: LocalDate = LocalDate.of(2023, 2, 7)
+                var first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
+                var second: LocalDate = Constants.datyRozpoczecia[readFirstDay()].plusDays(1)
                 val date: LocalDate =
                     Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
                 do {
@@ -66,7 +68,7 @@ object MealWidget : GlanceAppWidget() {
                     second = second.plusDays(8)
                 } while (second.isBefore(LocalDate.now().plusMonths(1)))
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
         provideContent {
             ContentView(meal.filter { it.workday }.take(2))
@@ -105,7 +107,9 @@ object MealWidget : GlanceAppWidget() {
                             fontSize = 13.sp
                         )
                     )
-                    Spacer(modifier = GlanceModifier.fillMaxWidth().height(1.dp).background(Color.Gray))
+                    Spacer(
+                        modifier = GlanceModifier.fillMaxWidth().height(1.dp).background(Color.Gray)
+                    )
                 }
             } else {
                 Text(
