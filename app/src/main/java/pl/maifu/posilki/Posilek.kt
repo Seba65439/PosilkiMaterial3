@@ -19,6 +19,9 @@ data class Posilek(
 )
 
 var posilki = mutableStateListOf<Posilek>()
+    private set
+var posilkiWorkDays = mutableStateListOf<Posilek>()
+    private set
 var index: Int? = null
 var currentDate: Date = Date.from(Instant.now())
 
@@ -56,12 +59,13 @@ fun menu(flag: Boolean = true) {
             }
         }
         posilki.workday()
+        posilkiWorkDays = posilki.filter { it.workday }.toMutableStateList()
 
     }
 
 }
 
-fun SnapshotStateList<Posilek>.workday() {
+fun Collection<Posilek>.workday() {
     this.forEach { it.workday = false }
     this.forEach {
         var first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
@@ -76,12 +80,24 @@ fun SnapshotStateList<Posilek>.workday() {
     }
 }
 
+fun updatePosilkiWorkDays(list: SnapshotStateList<Posilek>) {
+    posilkiWorkDays = list.filter { it.workday }.toMutableStateList()
+}
+
 fun readFirstDay(): Int {
     return Paper.book().read("date", 0) ?: 0
 }
 
 fun saveBrigade(brigade: Int) {
     Paper.book().write("date", brigade)
+}
+
+fun saveFontSize(fontSize: Int) {
+    Paper.book().write("font", fontSize)
+}
+
+fun readFontSize(): Int {
+    return Paper.book().read("font", 0) ?: 0
 }
 
 

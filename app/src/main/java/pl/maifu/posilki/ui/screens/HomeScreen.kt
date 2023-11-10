@@ -8,11 +8,13 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,14 +22,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -71,6 +78,8 @@ import pl.maifu.posilki.currentDate
 import pl.maifu.posilki.index
 import pl.maifu.posilki.menu
 import pl.maifu.posilki.posilki
+import pl.maifu.posilki.posilkiWorkDays
+import pl.maifu.posilki.readFontSize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -78,6 +87,11 @@ import java.util.Locale
 fun HomeScreen(onClick: (String) -> Unit) {
     var fontHeader by rememberSaveable { mutableIntStateOf(35) }
     var fontBody by rememberSaveable { mutableIntStateOf(25) }
+    LaunchedEffect(true) {
+        val font = readFontSize()
+        fontHeader = 35 + font
+        fontBody = 25 + font
+    }
     val isWatch = Build.MODEL == "GLL-AL01"
     if (isWatch) {
         fontHeader = 15
@@ -122,7 +136,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 }
 
                 IconButton(onClick = {
-                    onClick("info")
+                    onClick("settings")
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
@@ -139,27 +153,53 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 .padding(padding),
             color = MaterialTheme.colorScheme.background
         ) {
-
-            if (posilki.isEmpty()) {
-                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
-                Box(contentAlignment = Alignment.Center) {
-                    LottieAnimation(
-                        composition = composition, iterations = LottieConstants.IterateForever
-                    )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                var filter by rememberSaveable {
+                    mutableIntStateOf(0)
                 }
-
-
-            } else {
-                if (posilki.size == 1) {
-                    Toast.makeText(
-                        LocalContext.current,
-                        "Coś poszło nie tak, spróbuj jeszcze raz",
-                        Toast.LENGTH_LONG
-                    ).show()
+                if (posilki.isEmpty()) {
+                    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+                    Box(contentAlignment = Alignment.Center) {
+                        LottieAnimation(
+                            composition = composition, iterations = LottieConstants.IterateForever
+                        )
+                    }
                 } else {
-                    LazyList(posilki, fontHeader = fontHeader, fontBody = fontBody)
+                    if (posilki.size == 1) {
+                        Toast.makeText(
+                            LocalContext.current,
+                            "Coś poszło nie tak, spróbuj jeszcze raz",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        FilterChip(
+                            onClick = {
+                                when (it) {
+                                    0 -> filter = 0
+                                    1 -> filter = 1
+                                }
+                            },
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 1.dp),
+                            chipModifier = Modifier.padding(horizontal = 4.dp),
+                            filterIndex = filter
+                        )
+                        when (filter) {
+                            0 -> LazyList(
+                                posilki, fontHeader = fontHeader, fontBody = fontBody
+                            )
+
+                            1 -> LazyList(
+                                posilkiWorkDays, fontHeader = fontHeader, fontBody = fontBody
+                            )
+                        }
+                    }
                 }
             }
+
 
         }
 
@@ -184,7 +224,8 @@ fun LazyList(list: List<Posilek>, fontHeader: Int, fontBody: Int) {
                 true
             }
             .focusRequester(focusRequester)
-            .focusable(),
+            .focusable()
+            .fillMaxHeight(1f),
         state = state,
     ) {
         items(list) { m ->
@@ -225,7 +266,7 @@ fun LazyItem(
     textColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     val df = SimpleDateFormat("dd.MM.yy E", Locale.getDefault())
-    var expandedState by rememberSaveable {
+    var expandedState by remember {
         mutableStateOf(m.state)
     }
     val rotationState by animateFloatAsState(
@@ -276,9 +317,71 @@ fun LazyItem(
                     fontSize = fontBody.sp,
                     maxLines = 10,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(end = 40.dp)
+                    modifier = Modifier.padding(end = 40.dp),
+                    lineHeight = fontBody.sp
                 )
             }
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterChip(
+    onClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    chipModifier: Modifier = Modifier,
+    filterIndex: Int
+) {
+
+    val filterChips = remember {
+        mutableStateListOf(
+            ChipsState(
+                isSelected = false, text = "Wszystko"
+            ), ChipsState(
+                isSelected = false, text = "Pracujące"
+            )
+        )
+    }
+    filterChips[filterIndex].isSelected = true
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+    ) {
+        filterChips.forEachIndexed { index, info ->
+            FilterChip(
+                modifier = chipModifier,
+                onClick = {
+                    filterChips.replaceAll {
+                        it.copy(
+                            isSelected = it.text == info.text
+                        )
+                    }
+                    onClick(index)
+                },
+                label = {
+                    Text(info.text)
+                },
+                selected = info.isSelected,
+                leadingIcon = if (info.isSelected) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Done icon",
+                            modifier = Modifier.size(FilterChipDefaults.IconSize)
+                        )
+                    }
+                } else {
+                    null
+                },
+            )
+        }
+    }
+
+
+}
+
+data class ChipsState(
+    var isSelected: Boolean, val text: String
+)

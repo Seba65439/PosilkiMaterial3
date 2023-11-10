@@ -29,16 +29,13 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import io.paperdb.Paper
-import pl.maifu.posilki.Constants
 import pl.maifu.posilki.MainActivity
 import pl.maifu.posilki.Posilek
 import pl.maifu.posilki.R
-import pl.maifu.posilki.readFirstDay
 import pl.maifu.posilki.widget.callback.MealWidgetUpdateCallback
+import pl.maifu.posilki.workday
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -57,17 +54,7 @@ object MealWidget : GlanceAppWidget() {
                     break
                 }
             }
-            meal.forEach {
-                var first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
-                var second: LocalDate = Constants.datyRozpoczecia[readFirstDay()].plusDays(1)
-                val date: LocalDate =
-                    Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
-                do {
-                    if (date == first || date == second) it.workday = true
-                    first = first.plusDays(8)
-                    second = second.plusDays(8)
-                } while (second.isBefore(LocalDate.now().plusMonths(1)))
-            }
+            meal.workday()
         } catch (_: Exception) {
         }
         provideContent {
