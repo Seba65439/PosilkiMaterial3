@@ -121,7 +121,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(6.dp)
+                    .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 if (!isWatch) {
                     Text(
@@ -129,7 +129,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(top = 4.dp, start = 4.dp, end = 4.dp)
                             .weight(6f)
                             .align(Alignment.CenterVertically)
                     )
