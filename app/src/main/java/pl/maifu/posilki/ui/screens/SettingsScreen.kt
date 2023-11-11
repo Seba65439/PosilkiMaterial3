@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -26,10 +27,10 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -63,6 +64,7 @@ fun SettingsScreen(onClick: (String) -> Unit) {
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
             Row(
                 modifier = Modifier
@@ -84,7 +86,6 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                         fontSize = 30.sp
                     )
                 }
-
             }
             val options = listOf("Brygada 1", "Brygada 2", "Brygada 3", "Brygada 4")
             var expanded by remember { mutableStateOf(false) }
@@ -95,16 +96,14 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                 modifier = Modifier.padding(10.dp),
                 color = MaterialTheme.colorScheme.onSurface
             )
-
             ExposedDropdownMenuBox(modifier = Modifier.padding(10.dp),
                 expanded = expanded,
                 onExpandedChange = { expanded = it }) {
-                TextField(
+                OutlinedTextField(
                     readOnly = true,
                     value = selectedOptionText,
                     onValueChange = {},
-                    label = { Text("Brygada") },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
                             expanded = expanded
@@ -140,8 +139,8 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                 color = MaterialTheme.colorScheme.onSurface
             )
             var sliderPosition by remember { mutableFloatStateOf(readFontSize().toFloat()) }
-            val interactionSource = MutableInteractionSource()
-            Column {
+            val interactionSource = remember { MutableInteractionSource() }
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Slider(
                     value = sliderPosition,
                     onValueChange = { sliderPosition = it },
@@ -149,30 +148,38 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                     onValueChangeFinished = {
                         saveFontSize(sliderPosition.roundToInt())
                     },
-                    steps = 15,
                     thumb = {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primaryContainer),
-                            contentAlignment = Alignment.Center
+                        Column(
+                            modifier = Modifier.padding(bottom = 35.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = sliderPosition.roundToInt().toString(),
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
+                            Box(
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.secondary)
+                                    .align(Alignment.CenterHorizontally)
+                            ) {
+                                Text(
+                                    modifier = Modifier.align(Alignment.Center),
+                                    text = sliderPosition.roundToInt().toString(),
+                                    color = MaterialTheme.colorScheme.onSecondary,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Box(
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.secondary)
                             )
                         }
-
                     },
                     valueRange = -10f..20f
                 )
             }
-
-
             Text(
                 text = "Informacje",
                 fontSize = 25.sp,
@@ -183,7 +190,6 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
             ) {
                 val padding = Modifier.padding(start = 15.dp, end = 15.dp, top = 2.dp)
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -213,10 +219,6 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
             }
-
-
         }
-
-
     }
 }
