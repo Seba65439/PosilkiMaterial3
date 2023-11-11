@@ -100,5 +100,12 @@ fun readFontSize(): Int {
     return Paper.book().read("font", 0) ?: 0
 }
 
+fun saveFilterIndex(index: Int) {
+    Paper.book().write("index", index)
+}
+
+fun readFilterIndex(): Int {
+    return Paper.book().read("index", 0) ?: 0
+}
 
 

@@ -79,7 +79,9 @@ import pl.maifu.posilki.index
 import pl.maifu.posilki.menu
 import pl.maifu.posilki.posilki
 import pl.maifu.posilki.posilkiWorkDays
+import pl.maifu.posilki.readFilterIndex
 import pl.maifu.posilki.readFontSize
+import pl.maifu.posilki.saveFilterIndex
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -159,7 +161,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 var filter by rememberSaveable {
-                    mutableIntStateOf(0)
+                    mutableIntStateOf(readFilterIndex())
                 }
                 if (posilki.isEmpty()) {
                     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
@@ -178,10 +180,8 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     } else {
                         FilterChip(
                             onClick = {
-                                when (it) {
-                                    0 -> filter = 0
-                                    1 -> filter = 1
-                                }
+                                filter = it
+                                saveFilterIndex(it)
                             },
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 1.dp),
                             chipModifier = Modifier.padding(horizontal = 4.dp),
@@ -199,12 +199,8 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     }
                 }
             }
-
-
         }
-
     }
-
 }
 
 @Composable
