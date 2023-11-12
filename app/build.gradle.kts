@@ -84,5 +84,7 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.0.0")
     //Lottite animation
     implementation ("com.airbnb.android:lottie-compose:6.1.0")
+    //viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
 }

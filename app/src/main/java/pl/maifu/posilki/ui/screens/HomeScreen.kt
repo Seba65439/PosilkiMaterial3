@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -143,6 +144,14 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = "Settings button"
+                    )
+                }
+                IconButton(onClick = {
+                    onClick("work")
+                }, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        imageVector = Icons.Outlined.CalendarMonth,
+                        contentDescription = "Schedule button"
                     )
                 }
             }

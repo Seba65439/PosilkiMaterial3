@@ -11,6 +11,7 @@ import pl.maifu.posilki.data.GetData
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -68,15 +69,13 @@ fun menu(flag: Boolean = true) {
 fun Collection<Posilek>.workday() {
     this.forEach { it.workday = false }
     this.forEach {
-        var first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
-        var second: LocalDate = Constants.datyRozpoczecia[readFirstDay()].plusDays(1)
+        val first: LocalDate = Constants.datyRozpoczecia[readFirstDay()]
+        val cycle = listOf(1, 1, 0, 0, 0, 0, 0, 0)
         val date: LocalDate =
             Instant.ofEpochMilli(it.data.time).atZone(ZoneId.systemDefault()).toLocalDate()
-        do {
-            if (date == first || date == second) it.workday = true
-            first = first.plusDays(8)
-            second = second.plusDays(8)
-        } while (second.isBefore(LocalDate.now().plusMonths(1)))
+        val days = ChronoUnit.DAYS.between(first, date)
+        val index = days.mod(cycle.size)
+        if (cycle[index] == 1) it.workday = true
     }
 }
 

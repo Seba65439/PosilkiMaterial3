@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import io.paperdb.Paper
 import pl.maifu.posilki.ui.screens.HomeScreen
+import pl.maifu.posilki.ui.screens.ScheduleScreen
 import pl.maifu.posilki.ui.screens.SettingsScreen
 import pl.maifu.posilki.ui.theme.PosilkiTheme
 
@@ -27,6 +28,15 @@ class MainActivity : ComponentActivity() {
                     ) {
                         HomeScreen(onClick = {
                             navController.navigate(it)
+                        })
+                    }
+                    composable(
+                        "work"
+                    ) {
+                        ScheduleScreen(onClick = {
+                            navController.navigate(it, navOptions {
+                                popUpTo("home") { inclusive = true }
+                            })
                         })
                     }
                     composable(
