@@ -1,5 +1,7 @@
 package pl.maifu.posilki.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,11 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -84,14 +88,17 @@ fun SavedScheduleScreen(onClick: (String) -> Unit) {
             color = MaterialTheme.colorScheme.background
         ) {
             Column {
-                val itemsList = vm.savedSchedule.sortedBy { it.date }
+                val itemsList = vm.savedSchedule.sortedByDescending { it.date }
                 LazyColumn(
                     contentPadding = PaddingValues(4.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(itemsList) {
-                        ItemOfChanged(day = it, fontSize = fontSize)
+                        ItemOfChanged(day = it, fontSize = fontSize,
+                            delete = { schedule ->
+                                vm.deleteSchedule(schedule)
+                            })
                     }
                 }
             }
@@ -99,11 +106,12 @@ fun SavedScheduleScreen(onClick: (String) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemOfChanged(day: Schedule, fontSize: Int) {
+fun ItemOfChanged(day: Schedule, fontSize: Int, delete: (Schedule) -> Unit) {
     val color = when (day.workSchift) {
-        1 -> MaterialTheme.colorScheme.tertiaryContainer
-        2 -> MaterialTheme.colorScheme.primaryContainer
+//        1 -> MaterialTheme.colorScheme.tertiaryContainer
+//        2 -> MaterialTheme.colorScheme.primaryContainer
         else -> MaterialTheme.colorScheme.surface
     }
     val description = if (day.edited != "") day.edited else day.type
@@ -117,47 +125,63 @@ fun ItemOfChanged(day: Schedule, fontSize: Int) {
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
-        Column {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(1.dp),
-                modifier = Modifier.padding(start = 6.dp, top = 1.dp, bottom = 4.dp, end = 6.dp)
-            ) {
-                val df = DateTimeFormatter.ofPattern("dd.MM.yy EEEE")
-                Text(
-                    text = day.date.format(df),
-                    fontSize = fontSize.sp,
-                    modifier = Modifier.weight(6f),
-                    lineHeight = fontSize.sp
-                )
-                Text(
-                    text = description,
-                    fontSize = fontSize.sp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 15.dp),
-                    lineHeight = fontSize.sp
-                )
-                val bg = when (day.date.dayOfWeek) {
-                    DayOfWeek.SATURDAY -> Color.Blue.copy(alpha = 0.5f)
-                    DayOfWeek.SUNDAY -> Color.Red.copy(alpha = 0.5f)
-                    else -> Color.Transparent
+        Row {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                modifier = Modifier
+                    .combinedClickable(
+                        onClick = {},
+                        onLongClick = {
+                            delete(day)
+                        })
+                    .size(50.dp)
+            )
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(1.dp),
+                    modifier = Modifier.padding(start = 6.dp, top = 1.dp, bottom = 4.dp, end = 6.dp)
+                ) {
+                    val df = DateTimeFormatter.ofPattern("dd.MM.yy EEEE")
+
+                    Text(
+                        text = day.date.format(df),
+                        fontSize = fontSize.sp,
+                        modifier = Modifier.weight(6f),
+                        lineHeight = fontSize.sp
+                    )
+                    Text(
+                        text = description,
+                        fontSize = fontSize.sp,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 15.dp),
+                        lineHeight = fontSize.sp
+                    )
+                    val bg = when (day.date.dayOfWeek) {
+                        DayOfWeek.SATURDAY -> Color.Blue.copy(alpha = 0.5f)
+                        DayOfWeek.SUNDAY -> Color.Red.copy(alpha = 0.5f)
+                        else -> Color.Transparent
+                    }
+                    Icon(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        imageVector = Icons.Filled.Circle,
+                        contentDescription = null,
+                        tint = bg
+                    )
                 }
-                Icon(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    imageVector = Icons.Filled.Circle,
-                    contentDescription = null,
-                    tint = bg
-                )
-            }
-            if (day.note != "") {
-                Text(
-                    text = day.note,
-                    fontSize = fontSize.sp,
-                    modifier = Modifier.padding(start = 7.dp, end = 15.dp, bottom = 3.dp),
-                    lineHeight = fontSize.sp
-                )
+                if (day.note != "") {
+                    Text(
+                        text = day.note,
+                        fontSize = fontSize.sp,
+                        modifier = Modifier.padding(start = 7.dp, end = 15.dp, bottom = 3.dp),
+                        lineHeight = fontSize.sp
+                    )
+                }
             }
         }
+
 
     }
 }

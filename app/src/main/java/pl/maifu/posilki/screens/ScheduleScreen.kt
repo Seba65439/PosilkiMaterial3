@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowLeft
 import androidx.compose.material.icons.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -180,10 +181,13 @@ fun ScheduleScreen(onClick: (String) -> Unit) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Item(day: Schedule, fontSize: Int, dialog: () -> Unit) {
-    val color = when (day.workSchift) {
+    var color = when (day.workSchift) {
         1 -> MaterialTheme.colorScheme.tertiaryContainer
         2 -> MaterialTheme.colorScheme.primaryContainer
         else -> MaterialTheme.colorScheme.surface
+    }
+    if (day.date.compareTo(LocalDate.now()) == 0) {
+        color = MaterialTheme.colorScheme.tertiary
     }
     val description = if (day.edited != "") day.edited else day.type
     Card(
@@ -250,7 +254,7 @@ fun EditDay(
     onConfirmation: (optionSelected: String, note: String) -> Unit,
     clickedElement: Schedule,
 ) {
-    val df = DateTimeFormatter.ofPattern("dd.MM.yy EEEE")
+    val df = DateTimeFormatter.ofPattern("dd.MM.yy E")
     val optionSelected = remember {
         mutableStateOf(clickedElement.edited)
     }
@@ -261,7 +265,7 @@ fun EditDay(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(375.dp)
+                .height(400.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
@@ -272,19 +276,26 @@ fun EditDay(
             ) {
                 Icon(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    imageVector = Icons.Outlined.Check,
+                    imageVector = Icons.Outlined.Edit,
                     contentDescription = null
                 )
                 Text(
                     text = df.format(clickedElement.date),
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(8.dp),
+                )
+                Text(
+                    text = "Grafikowo: ${clickedElement.type}",
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(5.dp),
                 )
                 Dropdown(selected = optionSelected.value, isSelected = {
                     optionSelected.value = it
                 })
-                OutlinedTextField(label = {
-                    Text("Notatka")
-                }, value = note.value, onValueChange = { note.value = it })
+                OutlinedTextField(
+                    maxLines = 4,
+                    label = {
+                        Text("Notatka")
+                    }, value = note.value, onValueChange = { note.value = it })
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -295,7 +306,7 @@ fun EditDay(
                     ) {
                         Text("Anuluj")
                     }
-                    TextButton(
+                    OutlinedButton(
                         onClick = {
                             onConfirmation(
                                 optionSelected.value, note.value
@@ -303,7 +314,17 @@ fun EditDay(
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Zapisz")
+                        Row {
+                            Icon(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                imageVector = Icons.Outlined.Check,
+                                contentDescription = null
+                            )
+                            Text(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                text = "Zapisz"
+                            )
+                        }
                     }
                 }
             }

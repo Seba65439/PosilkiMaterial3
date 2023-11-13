@@ -35,6 +35,13 @@ class ScheduleViewModel : ViewModel() {
         scheduleCalendar()
     }
 
+    fun deleteSchedule(schedule: Schedule) {
+        val toRemove = _savedSchedule.filter { it.date == schedule.date }
+        _savedSchedule.removeAll(toRemove)
+        Paper.book().write("brygada${readFirstDay()}", _savedSchedule)
+        update()
+    }
+
     fun saveSchedule(schedule: Schedule) {
         val toRemove = _savedSchedule.filter { it.date == schedule.date }
         _savedSchedule.removeAll(toRemove)

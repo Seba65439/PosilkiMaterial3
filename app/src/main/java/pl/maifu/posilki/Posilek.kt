@@ -49,7 +49,7 @@ fun menu(flag: Boolean = true) {
         }
 
         val data: Date = Date.from(Instant.now())
-        data.time = data.time - TimeUnit.HOURS.toMillis(22)
+        data.time = data.time - TimeUnit.HOURS.toMillis(24)
         posilki.forEach {
             if (it.data.after(data)) {
                 if (index == null) {
