@@ -1,5 +1,6 @@
 package pl.maifu.posilki.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import pl.maifu.posilki.Screens
 import pl.maifu.posilki.data.Schedule
 import pl.maifu.posilki.readFontSize
 import java.time.DayOfWeek
@@ -62,6 +64,9 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun ScheduleScreen(onClick: (String) -> Unit) {
+    BackHandler(enabled = true) {
+        onClick(Screens.HOME.route)
+    }
     val vm: ScheduleViewModel = viewModel()
     var fontSize by rememberSaveable { mutableIntStateOf(25) }
     val showDialog = remember { mutableStateOf(false) }
@@ -92,7 +97,7 @@ fun ScheduleScreen(onClick: (String) -> Unit) {
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 IconButton(onClick = {
-                    onClick("home")
+                    onClick(Screens.HOME.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
@@ -108,7 +113,7 @@ fun ScheduleScreen(onClick: (String) -> Unit) {
                         .align(Alignment.CenterVertically)
                 )
                 IconButton(onClick = {
-                    onClick("saved")
+                    onClick(Screens.SCHEDULELIST.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.List, contentDescription = "List button"

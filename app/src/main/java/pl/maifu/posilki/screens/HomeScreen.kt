@@ -1,7 +1,9 @@
 package pl.maifu.posilki.screens
 
+import android.app.Activity
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -75,6 +77,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.maifu.posilki.Posilek
 import pl.maifu.posilki.R
+import pl.maifu.posilki.Screens
 import pl.maifu.posilki.currentDate
 import pl.maifu.posilki.index
 import pl.maifu.posilki.menu
@@ -88,6 +91,10 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(onClick: (String) -> Unit) {
+    val activity = LocalContext.current as? Activity
+    BackHandler(true) {
+        activity?.finish()
+    }
     var fontHeader by rememberSaveable { mutableIntStateOf(35) }
     var fontBody by rememberSaveable { mutableIntStateOf(25) }
     LaunchedEffect(true) {
@@ -139,7 +146,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 }
 
                 IconButton(onClick = {
-                    onClick("settings")
+                    onClick(Screens.SETTINGS.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
@@ -147,7 +154,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     )
                 }
                 IconButton(onClick = {
-                    onClick("work")
+                    onClick(Screens.SCHEDULE.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.CalendarMonth,

@@ -15,3 +15,10 @@ object Constants {
         LocalDate.of(2023, 2, 18)
     )
 }
+
+enum class Screens(val route: String) {
+    HOME("home"),
+    SCHEDULE("work"),
+    SETTINGS("settings"),
+    SCHEDULELIST("saved")
+}

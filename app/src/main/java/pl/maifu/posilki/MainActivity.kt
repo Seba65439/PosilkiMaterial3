@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import io.paperdb.Paper
 import pl.maifu.posilki.screens.HomeScreen
 import pl.maifu.posilki.screens.SavedScheduleScreen
@@ -23,37 +22,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             PosilkiTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "home") {
+                NavHost(navController = navController, startDestination = Screens.HOME.route) {
                     composable(
-                        "home"
+                        Screens.HOME.route
                     ) {
                         HomeScreen(onClick = {
                             navController.navigate(it)
                         })
                     }
                     composable(
-                        "work"
+                        Screens.SCHEDULE.route
                     ) {
                         ScheduleScreen(onClick = {
-                            navController.navigate(it, navOptions {
-                                popUpTo("home") { inclusive = true }
-                            })
+                            navController.navigate(it)
                         })
                     }
                     composable(
-                        "settings"
+                        Screens.SETTINGS.route
                     ) {
                         SettingsScreen(onClick = {
-                            navController.navigate(it, navOptions {
-                                popUpTo("home") { inclusive = true }
-                            })
+                            navController.navigate(it)
                         })
                     }
-                    composable("saved") {
+                    composable(Screens.SCHEDULELIST.route) {
                         SavedScheduleScreen(onClick = {
-                            navController.navigate(it, navOptions {
-                                popUpTo("work") { inclusive = true }
-                            })
+                            navController.navigate(it)
                         })
                     }
                 }
