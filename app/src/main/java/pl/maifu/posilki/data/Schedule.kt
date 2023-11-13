@@ -23,8 +23,23 @@ fun dateArray(start: LocalDate, end: LocalDate): Array<LocalDate> {
     return dates.requireNoNulls()
 }
 
-fun calendarForMonth(date: LocalDate): List<LocalDate> {
+fun calendarForMonth(date: LocalDate): List<Schedule> {
     val firstDay = date.with(TemporalAdjusters.firstDayOfMonth())
     val lastDay = date.with(TemporalAdjusters.lastDayOfMonth())
-    return dateArray(firstDay, lastDay).toMutableList()
+    val dateTab = dateArray(firstDay, lastDay).toMutableList()
+    val calendar = mutableListOf<Schedule>()
+    dateTab.forEach {
+        val work = workShift(it)
+        val type = when (work) {
+            1 -> "1"
+            2 -> "2"
+            else -> "-"
+        }
+        calendar.add(Schedule(it, work, type, type, ""))
+    }
+    return calendar
 }
+
+data class Schedule(
+    val date: LocalDate, val workSchift: Int, val type: String, val edited: String, val note: String
+)

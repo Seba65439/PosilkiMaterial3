@@ -1,4 +1,4 @@
-package pl.maifu.posilki.ui.screens
+package pl.maifu.posilki.screens
 
 import android.os.Build
 import android.util.Log
