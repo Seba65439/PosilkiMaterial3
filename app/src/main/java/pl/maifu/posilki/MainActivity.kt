@@ -18,7 +18,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Paper.init(this)
         menu()
-
         setContent {
             PosilkiTheme {
                 val navController = rememberNavController()
@@ -26,28 +25,20 @@ class MainActivity : ComponentActivity() {
                     composable(
                         Screens.HOME.route
                     ) {
-                        HomeScreen(onClick = {
-                            navController.navigate(it)
-                        })
+                        HomeScreen(navController = navController)
                     }
                     composable(
                         Screens.SCHEDULE.route
                     ) {
-                        ScheduleScreen(onClick = {
-                            navController.navigate(it)
-                        })
+                        ScheduleScreen(navController = navController)
                     }
                     composable(
                         Screens.SETTINGS.route
                     ) {
-                        SettingsScreen(onClick = {
-                            navController.navigate(it)
-                        })
+                        SettingsScreen(navController = navController)
                     }
                     composable(Screens.SCHEDULELIST.route) {
-                        SavedScheduleScreen(onClick = {
-                            navController.navigate(it)
-                        })
+                        SavedScheduleScreen(navController = navController)
                     }
                 }
             }

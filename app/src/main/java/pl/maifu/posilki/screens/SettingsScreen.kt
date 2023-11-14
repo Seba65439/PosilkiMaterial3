@@ -2,7 +2,6 @@ package pl.maifu.posilki.screens
 
 import android.os.Build
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pl.maifu.posilki.Screens
+import androidx.navigation.NavHostController
 import pl.maifu.posilki.posilki
 import pl.maifu.posilki.readFirstDay
 import pl.maifu.posilki.readFontSize
@@ -57,10 +56,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onClick: (String) -> Unit) {
-    BackHandler(enabled = true) {
-        onClick(Screens.HOME.route)
-    }
+fun SettingsScreen(navController: NavHostController) {
     val isWatch = Build.MODEL == "GLL-AL01"
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -78,7 +74,7 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                 horizontalArrangement = if (isWatch) Arrangement.Center else Arrangement.Start
             ) {
                 IconButton(onClick = {
-                    onClick(Screens.HOME.route)
+                    navController.popBackStack()
                 }) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
@@ -185,6 +181,7 @@ fun SettingsScreen(onClick: (String) -> Unit) {
                     valueRange = -10f..20f
                 )
             }
+
             Text(
                 text = "Informacje",
                 fontSize = 25.sp,

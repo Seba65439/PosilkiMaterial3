@@ -1,9 +1,7 @@
 package pl.maifu.posilki.screens
 
-import android.app.Activity
 import android.os.Build
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -68,6 +66,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -90,11 +89,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun HomeScreen(onClick: (String) -> Unit) {
-    val activity = LocalContext.current as? Activity
-    BackHandler(true) {
-        activity?.finish()
-    }
+fun HomeScreen(navController: NavHostController) {
     var fontHeader by rememberSaveable { mutableIntStateOf(35) }
     var fontBody by rememberSaveable { mutableIntStateOf(25) }
     LaunchedEffect(true) {
@@ -146,7 +141,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                 }
 
                 IconButton(onClick = {
-                    onClick(Screens.SETTINGS.route)
+                    navController.navigate(Screens.SETTINGS.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
@@ -154,7 +149,7 @@ fun HomeScreen(onClick: (String) -> Unit) {
                     )
                 }
                 IconButton(onClick = {
-                    onClick(Screens.SCHEDULE.route)
+                    navController.navigate(Screens.SCHEDULE.route)
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Outlined.CalendarMonth,

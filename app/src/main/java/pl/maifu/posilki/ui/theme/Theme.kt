@@ -79,19 +79,20 @@ fun PosilkiTheme(
     darkTheme: Boolean = if (Build.MODEL == "GLL-AL01") {
         true
     } else isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    //dynamicColor: Boolean = true,
+//     Dynamic color is available on Android 12+
+//    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
+//    val colorScheme = when {
 //        dynamicColor -> {
 //            val context = LocalContext.current
 //            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 //        }
-
-        darkTheme -> DarkColors
-        else -> LightColors
-    }
+//
+//        darkTheme -> DarkColors
+//        else -> LightColors
+//    }
+    val colorScheme = if (darkTheme) DarkColors else LightColors
     // val view = LocalView.current
     //if (!view.isInEditMode) {
     val systemUiController = rememberSystemUiController()
