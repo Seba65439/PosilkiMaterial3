@@ -3,6 +3,8 @@ package pl.maifu.posilki
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +21,10 @@ class MainActivity : ComponentActivity() {
         Paper.init(this)
         menu()
         setContent {
-            PosilkiTheme {
+            val vm: MainViewModel = viewModel()
+            vm.readTheme()
+            val theme = vm.theme.collectAsState()
+            PosilkiTheme(theme.value) {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Screens.HOME.route) {
                     composable(
@@ -35,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         Screens.SETTINGS.route
                     ) {
-                        SettingsScreen(navController = navController)
+                        SettingsScreen(navController = navController, vm = vm)
                     }
                     composable(Screens.SCHEDULELIST.route) {
                         SavedScheduleScreen(navController = navController)

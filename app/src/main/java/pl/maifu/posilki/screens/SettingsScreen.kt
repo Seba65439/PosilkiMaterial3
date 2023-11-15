@@ -28,10 +28,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import pl.maifu.posilki.MainViewModel
 import pl.maifu.posilki.posilki
 import pl.maifu.posilki.readFirstDay
 import pl.maifu.posilki.readFontSize
@@ -56,7 +59,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
     val isWatch = Build.MODEL == "GLL-AL01"
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -180,6 +183,27 @@ fun SettingsScreen(navController: NavHostController) {
                     },
                     valueRange = -10f..20f
                 )
+                Text(
+                    text = "Motyw",
+                    fontSize = 25.sp,
+                    modifier = Modifier.padding(10.dp),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                val theme = vm.theme.collectAsState()
+                Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = 0 == theme.value, onClick = { vm.saveTheme(0) })
+                        Text("System")
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = 1 == theme.value, onClick = { vm.saveTheme(1) })
+                        Text("Ciemny")
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = 2 == theme.value, onClick = { vm.saveTheme(2) })
+                        Text("Jasny")
+                    }
+                }
             }
 
             Text(

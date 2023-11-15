@@ -2,6 +2,7 @@ package pl.maifu.posilki.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,8 +50,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -61,6 +65,7 @@ import pl.maifu.posilki.readFontSize
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @Composable
 fun ScheduleScreen(navController: NavHostController) {
@@ -163,11 +168,33 @@ fun ScheduleScreen(navController: NavHostController) {
                     }
                 }
                 val itemsList = vm.calendarMonth.collectAsState()
-                LazyColumn(
-                    contentPadding = PaddingValues(4.dp),
+                val offset = remember { mutableIntStateOf(0) }
+                val firstDrag = remember { mutableStateOf(true) }
+                LazyColumn(contentPadding = PaddingValues(4.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset { IntOffset(offset.intValue, 0) }
+                        .pointerInput(Unit) {
+                            detectHorizontalDragGestures(onHorizontalDrag = { _, dragAmount ->
+                                if (firstDrag.value) {
+                                    val offsetChange = dragAmount.roundToInt()
+                                    offset.intValue += offsetChange
+                                    if (offset.intValue > 200) {
+                                        offset.intValue = 0
+                                        firstDrag.value = false
+                                        vm.minus()
+                                    } else if (offset.intValue < -200) {
+                                        offset.intValue = 0
+                                        firstDrag.value = false
+                                        vm.plus()
+                                    }
+                                }
+                            }, onDragEnd = {
+                                offset.intValue = 0
+                                firstDrag.value = true
+                            })
+                        }) {
                     items(itemsList.value) {
                         Item(day = it, fontSize = fontSize, dialog = {
                             showDialog.value = true
@@ -293,11 +320,9 @@ fun EditDay(
                 Dropdown(selected = optionSelected.value, isSelected = {
                     optionSelected.value = it
                 })
-                OutlinedTextField(
-                    maxLines = 4,
-                    label = {
-                        Text("Notatka")
-                    }, value = note.value, onValueChange = { note.value = it })
+                OutlinedTextField(maxLines = 4, label = {
+                    Text("Notatka")
+                }, value = note.value, onValueChange = { note.value = it })
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
