@@ -20,5 +20,6 @@ enum class Screens(val route: String) {
     HOME("home"),
     SCHEDULE("work"),
     SETTINGS("settings"),
-    SCHEDULELIST("saved")
+    SCHEDULELIST("saved"),
+    IMPORTEXPORT("importexport")
 }

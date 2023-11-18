@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.paperdb.Paper
 import pl.maifu.posilki.screens.HomeScreen
+import pl.maifu.posilki.screens.ImportExportScreen
 import pl.maifu.posilki.screens.SavedScheduleScreen
 import pl.maifu.posilki.screens.ScheduleScreen
 import pl.maifu.posilki.screens.SettingsScreen
@@ -44,6 +45,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.SCHEDULELIST.route) {
                         SavedScheduleScreen(navController = navController)
+                    }
+                    composable(Screens.IMPORTEXPORT.route) {
+                        ImportExportScreen(navController = navController)
                     }
                 }
             }

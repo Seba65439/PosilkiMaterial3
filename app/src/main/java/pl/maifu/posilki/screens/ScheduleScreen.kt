@@ -362,7 +362,7 @@ fun EditDay(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Dropdown(selected: String, isSelected: (String) -> Unit) {
-    val options = listOf("1", "2", "-", "DW", "U")
+    val options = listOf("1", "2", "-", "DW", "U", "CH")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(selected) }
 
