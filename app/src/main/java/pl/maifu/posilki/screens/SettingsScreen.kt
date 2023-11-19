@@ -3,6 +3,7 @@ package pl.maifu.posilki.screens
 import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -202,7 +203,7 @@ fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     val theme = vm.theme.collectAsState()
-                    Row {
+                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(selected = 0 == theme.value, onClick = { vm.saveTheme(0) })
                             Text("System")
@@ -214,6 +215,14 @@ fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(selected = 2 == theme.value, onClick = { vm.saveTheme(2) })
                             Text("Jasny")
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = 3 == theme.value, onClick = { vm.saveTheme(3) })
+                            Text("Dynamic dark")
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = 4 == theme.value, onClick = { vm.saveTheme(4) })
+                            Text("Dynamic light")
                         }
                     }
                     Text(

@@ -2,11 +2,15 @@ package pl.maifu.posilki.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColorScheme(
@@ -93,13 +97,45 @@ fun PosilkiTheme(
 //        darkTheme -> DarkColors
 //        else -> LightColors
 //    }
+    val context = LocalContext.current
+    val systemScheme = if (Build.MODEL == "GLL-AL01") true else isSystemInDarkTheme()
+    var darkTheme = false
+    val colorScheme: ColorScheme
+    when (theme) {
+        0 -> {
+            if (systemScheme) {
+                colorScheme = DarkColors
+                darkTheme = true
+            } else {
+                colorScheme = LightColors
+            }
+        }
 
-    val darkTheme = if (theme == 0) {
-        if (Build.MODEL == "GLL-AL01") {
-            true
-        } else isSystemInDarkTheme()
-    } else theme == 1
-    val colorScheme = if (darkTheme) DarkColors else LightColors
+        1 -> {
+            colorScheme = DarkColors
+            darkTheme = true
+        }
+
+        2 -> {
+            colorScheme = LightColors
+        }
+
+        3 -> {
+            colorScheme = dynamicDarkColorScheme(context)
+            darkTheme = true
+        }
+
+        else -> {
+            colorScheme = dynamicLightColorScheme(context)
+        }
+    }
+
+//    val darkTheme = if (theme == 0) {
+//        if (Build.MODEL == "GLL-AL01") {
+//            true
+//        } else isSystemInDarkTheme()
+//    } else theme == 1
+//    val colorScheme = if (darkTheme) DarkColors else LightColors
     // val view = LocalView.current
     //if (!view.isInEditMode) {
     val systemUiController = rememberSystemUiController()
