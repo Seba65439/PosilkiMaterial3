@@ -216,13 +216,17 @@ fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
                             RadioButton(selected = 2 == theme.value, onClick = { vm.saveTheme(2) })
                             Text("Jasny")
                         }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(selected = 3 == theme.value, onClick = { vm.saveTheme(3) })
-                            Text("Dynamic dark")
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(selected = 4 == theme.value, onClick = { vm.saveTheme(4) })
-                            Text("Dynamic light")
+                        if (Build.VERSION.SDK_INT >= 31) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(selected = 3 == theme.value,
+                                    onClick = { vm.saveTheme(3) })
+                                Text("Dynamic dark")
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(selected = 4 == theme.value,
+                                    onClick = { vm.saveTheme(4) })
+                                Text("Dynamic light")
+                            }
                         }
                     }
                     Text(
