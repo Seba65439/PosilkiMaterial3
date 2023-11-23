@@ -39,6 +39,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -46,7 +47,8 @@ import kotlin.random.Random
 
 @Composable
 fun ImportExportScreen(navController: NavHostController) {
-    val fileName = "Kopia-${LocalDate.now()}-${Random.nextInt(1000, 9999)}"
+    val df = DateTimeFormatter.ofPattern("dd_MM_yy")
+    val fileName = "Kopia_${LocalDate.now().format(df)}_${Random.nextInt(100000, 999999)}"
     val path = Paper.book().path
     val files = mutableListOf<File>()
     val keys = Paper.book().allKeys
@@ -139,7 +141,6 @@ fun ImportExportScreen(navController: NavHostController) {
                 }) {
                     Text("Przywróć kopię")
                 }
-
             }
         }
     }
