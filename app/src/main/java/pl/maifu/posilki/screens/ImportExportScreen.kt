@@ -46,7 +46,7 @@ import java.util.zip.ZipOutputStream
 import kotlin.random.Random
 
 @Composable
-fun ImportExportScreen(navController: NavHostController, openDrawer: () -> Unit) {
+fun ImportExportScreen(openDrawer: () -> Unit) {
     val df = DateTimeFormatter.ofPattern("dd_MM_yy")
     val fileName = "Kopia_${LocalDate.now().format(df)}_${Random.nextInt(100000, 999999)}"
     val path = Paper.book().path

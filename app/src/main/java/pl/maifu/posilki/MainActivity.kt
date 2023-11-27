@@ -140,14 +140,14 @@ class MainActivity : ComponentActivity() {
                         composable(
                             Screens.HOME.route
                         ) {
-                            HomeScreen(navController = navController, openDrawer = {
+                            HomeScreen(openDrawer = {
                                 openDrawer()
                             })
                         }
                         composable(
                             Screens.SCHEDULE.route
                         ) {
-                            ScheduleScreen(navController = navController, openDrawer = {
+                            ScheduleScreen(openDrawer = {
                                 openDrawer()
                             })
                         }
@@ -159,12 +159,12 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                         composable(Screens.SCHEDULELIST.route) {
-                            SavedScheduleScreen(navController = navController, openDrawer = {
+                            SavedScheduleScreen(openDrawer = {
                                 openDrawer()
                             })
                         }
                         composable(Screens.IMPORTEXPORT.route) {
-                            ImportExportScreen(navController = navController, openDrawer = {
+                            ImportExportScreen(openDrawer = {
                                 openDrawer()
                             })
                         }

@@ -62,7 +62,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @Composable
-fun ScheduleScreen(navController: NavHostController, openDrawer: () -> Unit) {
+fun ScheduleScreen(openDrawer: () -> Unit) {
     val vm: ScheduleViewModel = viewModel()
     var fontSize by rememberSaveable { mutableIntStateOf(25) }
     val showDialog = remember { mutableStateOf(false) }

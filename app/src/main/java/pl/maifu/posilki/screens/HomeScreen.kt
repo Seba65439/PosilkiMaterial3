@@ -87,7 +87,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun HomeScreen(navController: NavHostController, openDrawer: () -> Unit) {
+fun HomeScreen(openDrawer: () -> Unit) {
     var fontHeader by rememberSaveable { mutableIntStateOf(35) }
     var fontBody by rememberSaveable { mutableIntStateOf(25) }
     LaunchedEffect(true) {
