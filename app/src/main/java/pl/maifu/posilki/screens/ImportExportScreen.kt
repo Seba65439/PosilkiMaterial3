@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +46,7 @@ import java.util.zip.ZipOutputStream
 import kotlin.random.Random
 
 @Composable
-fun ImportExportScreen(navController: NavHostController) {
+fun ImportExportScreen(navController: NavHostController, openDrawer: () -> Unit) {
     val df = DateTimeFormatter.ofPattern("dd_MM_yy")
     val fileName = "Kopia_${LocalDate.now().format(df)}_${Random.nextInt(100000, 999999)}"
     val path = Paper.book().path
@@ -91,10 +91,10 @@ fun ImportExportScreen(navController: NavHostController) {
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    openDrawer()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
+                        imageVector = Icons.Default.Menu, contentDescription = "Menu button"
                     )
                 }
                 Text(
@@ -111,6 +111,7 @@ fun ImportExportScreen(navController: NavHostController) {
 
     }) { padding ->
         Surface(
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)

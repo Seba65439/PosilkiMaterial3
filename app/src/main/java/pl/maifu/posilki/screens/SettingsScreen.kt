@@ -18,7 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,7 +62,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
+fun SettingsScreen(navController: NavHostController, vm: MainViewModel, openDrawer: () -> Unit) {
     Scaffold(topBar = {
         Surface(
             color = MaterialTheme.colorScheme.background
@@ -73,10 +73,10 @@ fun SettingsScreen(navController: NavHostController, vm: MainViewModel) {
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    openDrawer()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
+                        imageVector = Icons.Default.Menu, contentDescription = "Menu button"
                     )
                 }
                 Text(

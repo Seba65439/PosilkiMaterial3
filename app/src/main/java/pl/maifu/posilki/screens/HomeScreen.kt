@@ -27,9 +27,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -76,7 +75,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.maifu.posilki.Posilek
 import pl.maifu.posilki.R
-import pl.maifu.posilki.Screens
 import pl.maifu.posilki.currentDate
 import pl.maifu.posilki.index
 import pl.maifu.posilki.menu
@@ -89,7 +87,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, openDrawer: () -> Unit) {
     var fontHeader by rememberSaveable { mutableIntStateOf(35) }
     var fontBody by rememberSaveable { mutableIntStateOf(25) }
     LaunchedEffect(true) {
@@ -128,6 +126,14 @@ fun HomeScreen(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
+                IconButton(onClick = {
+                    openDrawer()
+                }, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Menu button"
+                    )
+                }
                 if (!isWatch) {
                     Text(
                         text = stringResource(id = R.string.app_name),
@@ -137,23 +143,6 @@ fun HomeScreen(navController: NavHostController) {
                             .padding(top = 4.dp, start = 4.dp, end = 4.dp)
                             .weight(6f)
                             .align(Alignment.CenterVertically)
-                    )
-                }
-
-                IconButton(onClick = {
-                    navController.navigate(Screens.SETTINGS.route)
-                }, modifier = Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "Settings button"
-                    )
-                }
-                IconButton(onClick = {
-                    navController.navigate(Screens.SCHEDULE.route)
-                }, modifier = Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.Outlined.CalendarMonth,
-                        contentDescription = "Schedule button"
                     )
                 }
             }

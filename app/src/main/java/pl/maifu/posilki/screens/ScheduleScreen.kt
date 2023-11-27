@@ -19,10 +19,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.ArrowLeft
 import androidx.compose.material.icons.outlined.ArrowRight
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -54,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import pl.maifu.posilki.Screens
 import pl.maifu.posilki.data.Schedule
 import pl.maifu.posilki.readFontSize
 import pl.maifu.posilki.screens.composables.EditDay
@@ -64,7 +62,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @Composable
-fun ScheduleScreen(navController: NavHostController) {
+fun ScheduleScreen(navController: NavHostController, openDrawer: () -> Unit) {
     val vm: ScheduleViewModel = viewModel()
     var fontSize by rememberSaveable { mutableIntStateOf(25) }
     val showDialog = remember { mutableStateOf(false) }
@@ -95,10 +93,10 @@ fun ScheduleScreen(navController: NavHostController) {
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    openDrawer()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
+                        imageVector = Icons.Default.Menu, contentDescription = "Menu button"
                     )
                 }
                 Text(
@@ -110,13 +108,6 @@ fun ScheduleScreen(navController: NavHostController) {
                         .weight(6f)
                         .align(Alignment.CenterVertically)
                 )
-                IconButton(onClick = {
-                    navController.navigate(Screens.SCHEDULELIST.route)
-                }, modifier = Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.Outlined.List, contentDescription = "List button"
-                    )
-                }
             }
         }
 

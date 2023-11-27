@@ -19,7 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.PlaylistRemove
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -57,7 +57,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SavedScheduleScreen(navController: NavHostController) {
+fun SavedScheduleScreen(navController: NavHostController, openDrawer: () -> Unit) {
     val vm: ScheduleViewModel = viewModel()
     var fontSize by rememberSaveable { mutableIntStateOf(25) }
     val showDialog = remember { mutableStateOf(false) }
@@ -88,10 +88,10 @@ fun SavedScheduleScreen(navController: NavHostController) {
                     .padding(top = 6.dp, start = 6.dp, end = 6.dp)
             ) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    openDrawer()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back button"
+                        imageVector = Icons.Default.Menu, contentDescription = "Menu button"
                     )
                 }
                 Text(
