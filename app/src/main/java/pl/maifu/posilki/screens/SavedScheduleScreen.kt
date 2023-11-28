@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import pl.maifu.posilki.data.Schedule
 import pl.maifu.posilki.readFontSize
 import pl.maifu.posilki.screens.composables.EditDay
@@ -169,7 +168,7 @@ fun SavedScheduleScreen(openDrawer: () -> Unit) {
                             }, dialog = {
                                 showDialog.value = true
                                 clickedElement.value = it
-                            })
+                            }, holiday = vm.holidayName(it.date))
                         }
                     }
                 }
@@ -180,7 +179,13 @@ fun SavedScheduleScreen(openDrawer: () -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemOfChanged(day: Schedule, fontSize: Int, delete: (Schedule) -> Unit, dialog: () -> Unit) {
+fun ItemOfChanged(
+    day: Schedule,
+    fontSize: Int,
+    delete: (Schedule) -> Unit,
+    dialog: () -> Unit,
+    holiday: String
+) {
     val context = LocalContext.current
     val color = when (day.workSchift) {
 //        1 -> MaterialTheme.colorScheme.tertiaryContainer
@@ -250,6 +255,21 @@ fun ItemOfChanged(day: Schedule, fontSize: Int, delete: (Schedule) -> Unit, dial
                             text = description,
                             fontSize = fontSize.sp,
                             lineHeight = fontSize.sp,
+                        )
+                    }
+                }
+                if (holiday.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(255, 87, 87).copy(alpha = 0.5f))
+                    ) {
+                        Text(
+                            text = holiday,
+                            fontSize = fontSize.sp,
+                            lineHeight = fontSize.sp,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
                 }

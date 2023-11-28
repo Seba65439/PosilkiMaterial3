@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import pl.maifu.posilki.data.Schedule
 import pl.maifu.posilki.readFontSize
 import pl.maifu.posilki.screens.composables.EditDay
@@ -183,10 +182,12 @@ fun ScheduleScreen(openDrawer: () -> Unit) {
                             })
                         }) {
                     items(itemsList.value) {
-                        Item(day = it, fontSize = fontSize, dialog = {
-                            showDialog.value = true
-                            clickedElement.value = it
-                        })
+                        Item(
+                            day = it, fontSize = fontSize, dialog = {
+                                showDialog.value = true
+                                clickedElement.value = it
+                            }, holiday = vm.holidayName(it.date)
+                        )
                     }
                 }
             }
@@ -196,7 +197,7 @@ fun ScheduleScreen(openDrawer: () -> Unit) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Item(day: Schedule, fontSize: Int, dialog: () -> Unit) {
+fun Item(day: Schedule, fontSize: Int, dialog: () -> Unit, holiday: String) {
     val context = LocalContext.current
     var color = when (day.workSchift) {
         1 -> MaterialTheme.colorScheme.tertiaryContainer
@@ -253,6 +254,21 @@ fun Item(day: Schedule, fontSize: Int, dialog: () -> Unit) {
                         text = description,
                         fontSize = fontSize.sp,
                         lineHeight = fontSize.sp,
+                    )
+                }
+            }
+            if (holiday.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(255, 87, 87).copy(alpha = 0.5f))
+                ) {
+                    Text(
+                        text = holiday,
+                        fontSize = fontSize.sp,
+                        lineHeight = fontSize.sp,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
             }
